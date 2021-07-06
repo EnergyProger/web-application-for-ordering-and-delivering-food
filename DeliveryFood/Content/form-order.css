@@ -1,0 +1,23 @@
+﻿.form_order{
+    display: flex;
+    /*justify-content: space-between;*/
+}
+.form_order_info{
+    width: 70%;
+}
+.form_order_goods {
+    width: 30%;
+   
+}
+.form_order_goods h2{
+   padding-bottom: 5px;
+   padding-left: 40px;
+}
+.form_order_goods_detail {
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+.form_order_goods_detail p{
+    color: brown;
+    padding-left: 8px;
+}

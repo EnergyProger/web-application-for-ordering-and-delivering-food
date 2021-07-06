@@ -1,0 +1,97 @@
+﻿@model IEnumerable<DeliveryFood.Models.Products>
+   
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<!-- Start Top Products Area -->
+<section class="top-products-area pt-100 pb-70" id="trend">
+    <div class="container">
+        <div class="section-title">
+            @{
+                string pr = "";
+            }
+            @foreach (var i in Model)
+            {
+                pr = @i.Categories.Title;
+            }
+
+
+            <h2>@pr</h2>
+
+
+           
+        </div>
+
+        <div class="row">
+            @foreach (var prod in Model)
+            {
+                <div class="col-lg-3 col-md-6">
+                    <div class="top-products-item">
+                        <div class="products-image">
+                            <a href="/Products/Details/@prod.ProductId"><img src="~/Img/products/@prod.Product_img" alt="image"></a>
+                            <!--Це залишити (приклад)-->
+                            <ul class="products-action">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li>
+                                        <a href="/Basket/Create/@prod.ProductId" data-tooltip="tooltip" data-placement="top" title="Добавити до корзини"><i class="flaticon-shopping-cart"></i></a>
+
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a href="/Home/Login" data-tooltip="tooltip" data-placement="top" title="Добавити до корзини"><i class="flaticon-shopping-cart"></i></a>
+
+                                    </li>
+                                }
+
+                            </ul>
+
+
+                        </div>
+
+                        <div class="products-content">
+                            <h3>
+                                @*<a href="Products/Details/@prod.ProductId">@prod.Denomination</a>*@
+                                @Html.ActionLink(prod.Denomination, "Details", "Products", new { id = prod.ProductId }, null)
+                            </h3>
+                            <div class="price">
+                                <span class="new-price">@String.Format("{0:₴#,##0.00}", prod.Price)</span>
+
+                                <!-- <span class="old-price">$125.00</span> -->
+                            </div>
+                            <div>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <a href="/Basket/Create/@prod.ProductId" class="floating-button">Купити</a>
+                                }
+                                else
+                                {
+                                    <a href="/Home/Login" class="floating-button">Купити</a>
+                                }
+
+                            </div>
+                            <!-- <ul class="rating">
+                        <li>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bx-star'></i>
+                        </li>
+                    </ul> -->
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+
+        </div>
+    </div>
+</section>
+<!-- End Top Products Area -->

@@ -1,0 +1,34 @@
+﻿@model DeliveryFood.Models.Users
+@{
+    ViewBag.Title = "Info";
+}
+
+@if (Session["Info"] != null)
+{
+    
+<div style="margin: 0 auto; position: absolute; left: 50%;" class="alert alert-primary w-25" role="alert" id="message">
+    @Session["Info"]
+</div>
+}
+@{
+    Session["Info"] = null;
+}
+<div class="container">
+    <form style="margin-left: 40%; margin-top: 40px; margin-bottom: 40px;">
+        <div class="form-group w-25">
+            <label for="formGroupExampleInput">Ім'я</label>
+            <input type="text" class="form-control" id="formGroupExampleInput" value="@Model.FirstName">
+        </div>
+        <div class="form-group w-25">
+            <label for="formGroupExampleInput2">Прізвище</label>
+            <input type="text" class="form-control" id="formGroupExampleInput2" value="@Model.LastName">
+        </div>
+        <div class="form-group w-25">
+            <label for="formGroupExampleInput2">Дата народження</label>
+            <input type="text" class="form-control" id="formGroupExampleInput2" value="@String.Format("{0:D}", @Model.Birthday)">
+        </div>
+        <a class="btn btn-primary" href="/Client/Edit/@Model.UserId">Редагувати</a>
+    </form>
+
+
+</div>

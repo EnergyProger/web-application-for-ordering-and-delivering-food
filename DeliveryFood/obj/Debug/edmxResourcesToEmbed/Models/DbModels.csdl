@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DeliveryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="Users" Relationship="DeliveryModel.FK_Users_Roles" FromRole="Roles" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Email" Type="String" MaxLength="255" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="255" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="255" FixedLength="true" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="255" FixedLength="true" Unicode="true" />
+    <Property Name="Birthday" Type="DateTime" Precision="0" />
+    <Property Name="RoleId" Type="Int32" />
+    <NavigationProperty Name="Roles" Relationship="DeliveryModel.FK_Users_Roles" FromRole="Users" ToRole="Roles" />
+    <NavigationProperty Name="Orders" Relationship="DeliveryModel.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
+  </EntityType>
+  <EntityContainer Name="DeliveryEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Roles" EntityType="Self.Roles" />
+    <EntitySet Name="Users" EntityType="Self.Users" />
+    <AssociationSet Name="FK_Users_Roles" Association="DeliveryModel.FK_Users_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="Users" EntitySet="Users" />
+    </AssociationSet>
+    <EntitySet Name="Categories" EntityType="DeliveryModel.Categories" />
+    <EntitySet Name="Products" EntityType="DeliveryModel.Products" />
+    <AssociationSet Name="FK_Products_Categories" Association="DeliveryModel.FK_Products_Categories">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <EntitySet Name="Baskets" EntityType="DeliveryModel.Baskets" />
+    <EntitySet Name="Orders" EntityType="DeliveryModel.Orders" />
+    <AssociationSet Name="FK_Baskets_Orders" Association="DeliveryModel.FK_Baskets_Orders">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="Baskets" EntitySet="Baskets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Baskets_Products" Association="DeliveryModel.FK_Baskets_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Baskets" EntitySet="Baskets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Orders_Users" Association="DeliveryModel.FK_Orders_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="FK_Users_Roles">
+    <End Type="DeliveryModel.Roles" Role="Roles" Multiplicity="0..1" />
+    <End Type="DeliveryModel.Users" Role="Users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="CategoryId" />
+    </Key>
+    <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="255" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="Products" Relationship="DeliveryModel.FK_Products_Categories" FromRole="Categories" ToRole="Products" />
+    <Property Name="Img_category" Type="String" MaxLength="255" FixedLength="true" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Denomination" Type="String" MaxLength="255" FixedLength="true" Unicode="true" />
+    <Property Name="CategoryId" Type="Int32" />
+    <NavigationProperty Name="Categories" Relationship="DeliveryModel.FK_Products_Categories" FromRole="Products" ToRole="Categories" />
+    <Property Name="Ingredients" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Product_img" Type="String" MaxLength="255" FixedLength="true" Unicode="true" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Weight" Type="Int32" />
+    <NavigationProperty Name="Baskets" Relationship="DeliveryModel.FK_Baskets_Products" FromRole="Products" ToRole="Baskets" />
+  </EntityType>
+  <Association Name="FK_Products_Categories">
+    <End Type="DeliveryModel.Categories" Role="Categories" Multiplicity="0..1" />
+    <End Type="DeliveryModel.Products" Role="Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="CategoryId" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Baskets">
+    <Key>
+      <PropertyRef Name="BasketId" />
+    </Key>
+    <Property Name="BasketId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderId" Type="Int32" />
+    <Property Name="ProductId" Type="Int32" />
+    <Property Name="Quantity" Type="Int32" />
+    <NavigationProperty Name="Orders" Relationship="DeliveryModel.FK_Baskets_Orders" FromRole="Baskets" ToRole="Orders" />
+    <NavigationProperty Name="Products" Relationship="DeliveryModel.FK_Baskets_Products" FromRole="Baskets" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="OderId" />
+      <PropertyRef Name="OrderId" />
+    </Key>
+    <Property Name="OderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ClientId" Type="Int32" />
+    <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="TotalBill" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Baskets" Relationship="DeliveryModel.FK_Baskets_Orders" FromRole="Orders" ToRole="Baskets" />
+    <NavigationProperty Name="Users" Relationship="DeliveryModel.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
+  </EntityType>
+  <Association Name="FK_Baskets_Orders">
+    <End Type="DeliveryModel.Orders" Role="Orders" Multiplicity="0..1" />
+    <End Type="DeliveryModel.Baskets" Role="Baskets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="OrderId" />
+      </Principal>
+      <Dependent Role="Baskets">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Baskets_Products">
+    <End Type="DeliveryModel.Products" Role="Products" Multiplicity="0..1" />
+    <End Type="DeliveryModel.Baskets" Role="Baskets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductId" />
+      </Principal>
+      <Dependent Role="Baskets">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Orders_Users">
+    <End Type="DeliveryModel.Users" Role="Users" Multiplicity="0..1" />
+    <End Type="DeliveryModel.Orders" Role="Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="ClientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

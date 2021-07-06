@@ -1,0 +1,100 @@
+﻿
+
+@{
+    ViewBag.Title = "Basket";
+    var bask = ViewData["Bask"] as IEnumerable<DeliveryFood.Models.Baskets>;
+    double sum = 0;
+}
+
+@if (Session["Order"] != null)
+{
+
+    <div style="margin: 0 auto; position: absolute; left: 40%;" class="alert alert-primary w-25" role="alert" id="message">
+        @Session["Order"]
+    </div>
+}
+@{
+    Session["Order"] = null;
+}
+
+<div class="container">
+    <h2>Корзина</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Назва</th>
+                <th scope="col">Ціна</th>
+                <th scope="col">Кількість</th>
+                <th scope="col">Операції</th>
+                <th scope="col">Загальна ціна</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (bask.Count() > 0)
+            {
+                foreach (var i in bask)
+                {
+                    <tr>
+
+                        <td>@i.Products.Denomination</td>
+                        <td>@String.Format("{0:#,##0.00}", i.Products.Price)</td>
+                        <td>
+
+                            @*<form action="/Basket/Edit/i.ProductId" method="post">
+
+                                </form>*@
+                            @*<input type="number" value="@i.Quantity" min="0" style="width: 70px;" />*@
+                            @i.Quantity
+
+
+
+
+                        </td>
+                        <td><a onclick="return confirm('Видалити?')" href="/Basket/Delete/@i.BasketId" title="Видалити"><i class="fas fa-trash"></i></a></td>
+                        @{
+                            var t = i.Quantity * i.Products.Price;
+
+                            sum += Convert.ToDouble(i.Quantity * i.Products.Price);
+                        }
+                        <td>@String.Format("{0:#,##0.00}", t)</td>
+                    </tr>
+                }
+
+                <tr>
+                    <td colspan="1" align="left"><a style="color: red; " href="javascript:history.go(-1)">Продовжити покупку</a></td>
+                    <td colspan="2" align="center"><a href="/Order/Index"><i class="fas fa-credit-card"></i> Оформити замовлення</a></td>
+                    <td colspan="4" align="right">Рахунок: @String.Format("{0:#,##0.00}", sum) грн.</td>
+
+
+                </tr>
+            }
+            else
+            {
+                foreach (var i in bask)
+                {
+                    <tr>
+
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <form action="/" method="post">
+                                <input type="number" value="0" min="0" style="width: 70px;" /> @*<a href=""><i class="fas fa-pen"></i></a>*@
+
+                            </form>
+                        </td>
+                        <td><a href="#" title="Видалити"><i class="fas fa-trash"></i></a></td>
+                        <td></td>
+                    </tr>
+                }
+
+
+                <tr>
+                    <td colspan="5" align="right">Рахунок: 0</td>
+
+                </tr>
+
+            }
+
+        </tbody>
+    </table>
+</div>

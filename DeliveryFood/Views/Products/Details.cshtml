@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+
+}
+@model  DeliveryFood.Models.Products
+
+
+<div class="content__detail">
+    <div class="content__detail__img">
+        <img src="~/Img/products/@Model.Product_img" alt="Alternate Text" />
+    </div>
+    <div class="content__detail__text">
+        <h3>@Model.Denomination</h3>
+        <p>Склад: @Model.Ingredients</p>
+        @if (Model.CategoryId == 4)
+        {
+            <p>Вага: @Model.Weight л.</p>
+        }
+        else
+        {
+            <p>Вага: @Model.Weight г.</p>
+        }
+        <div class="content__detail__text__buy">
+            <div class="price">
+                <span class="new-price">Ціна: @String.Format("{0:₴#,##0.00}", Model.Price)</span>
+
+                <!-- <span class="old-price">$125.00</span> -->
+            </div>
+            <div class="button_buy">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a href="/Basket/Create/@Model.ProductId" class="floating-button">Купити</a>
+                }
+                else
+                {
+                    <a href="/Home/Login" class="floating-button">Купити</a>
+                }
+
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div class="content__desc">
+    <h3 class="tt">Історія</h3>
+    <p>@Model.Description</p>
+</div>
+
+
